@@ -1,0 +1,202 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --fg: #fff;
+  --title-color: #1c1c1c;
+  --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Nav */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+header a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+header a:hover {
+  opacity: 0.5;
+}
+
+.nav-left,
+.nav-right {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+/* Homepage */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2vh 2.5rem 0.5vh;
+}
+
+.tagline {
+  font-size: clamp(0.85rem, 1.4vw, 1.2rem);
+  font-weight: 400;
+  color: #888;
+  text-align: center;
+  margin-top: 1.2rem;
+  letter-spacing: 0.01em;
+  max-width: 36ch;
+}
+
+@keyframes wave-reveal {
+  from { background-position: 100% 0; }
+  to   { background-position:   0% 0; }
+}
+
+h1 {
+  font-size: clamp(2.5rem, 13vw, 13vw);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-transform: none;
+  white-space: nowrap;
+  width: 100%;
+  padding-bottom: 0.15em;
+
+  background: linear-gradient(to right, #fff 45%, #1c1c1c 55%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: wave-reveal 1.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.name-break { display: none; }
+
+@media (max-width: 700px) {
+  h1 {
+    white-space: normal;
+    font-size: 20vw;
+    line-height: 0.88;
+  }
+
+  .name-break { display: block; }
+}
+
+/* Portfolio grid */
+.portfolio {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 4rem 4rem 4rem;
+}
+
+.portfolio-item {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.portfolio-item.full-row {
+  grid-column: 1 / -1;
+}
+
+.portfolio-item img,
+.portfolio-item video {
+  width: 100%;
+  display: block;
+  border-radius: 2px;
+}
+
+.portfolio-item.portrait img,
+.portfolio-item.portrait video {
+  width: 62%;
+  height: auto;
+  object-fit: unset;
+}
+
+@media (max-width: 600px) {
+  .portfolio {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem 1rem;
+  }
+}
+
+/* Contact */
+.contact-main {
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.mail-icon {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}
+
+.email-link:hover {
+  opacity: 0.5;
+}
+
+.instagram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.instagram-link:hover {
+  opacity: 0.5;
+}
+
+.ig-icon {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}

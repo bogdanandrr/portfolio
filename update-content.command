@@ -11,7 +11,7 @@ for f in content/*; do
   esac
 done
 
-IFS=$'\n' sorted=($(sort <<<"${files[*]}")); unset IFS
+IFS=$'\n' sorted=($(printf '%s\n' "${files[@]}" | sort -V)); unset IFS
 
 json="["
 for i in "${!sorted[@]}"; do

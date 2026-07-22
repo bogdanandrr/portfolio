@@ -143,6 +143,11 @@ h1 {
     grid-template-columns: 1fr;
     padding: 2rem 1rem 1rem;
   }
+
+  .portfolio-item.portrait img,
+  .portfolio-item.portrait video {
+    width: 95%;
+  }
 }
 
 /* Contact */
@@ -157,6 +162,11 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.profile-pic {
+  width: clamp(200px, 50vw, 420px);
+  object-fit: cover;
 }
 
 .email-link {

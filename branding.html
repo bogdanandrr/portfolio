@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Branding — Andrei Bogdan</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
   <script src="branding/manifest.js"></script>
 </head>
 <body>
@@ -21,10 +21,34 @@
   <script>
     const list = document.getElementById('brand-list');
     const brands = window.BRANDING || {};
+    const VIDEO_EXT = /\.(mp4|webm|mov)$/i;
+
     Object.keys(brands).sort().forEach(name => {
       const a = document.createElement('a');
+      a.className = 'brand-card';
       a.href = 'brand.html?name=' + encodeURIComponent(name);
-      a.textContent = name;
+
+      const title = document.createElement('span');
+      title.className = 'brand-name';
+      title.textContent = name;
+      a.appendChild(title);
+
+      const cover = brands[name][0];
+      if (cover) {
+        const src = 'branding/' + encodeURIComponent(name) + '/' + encodeURIComponent(cover);
+        let media;
+        if (VIDEO_EXT.test(cover)) {
+          media = document.createElement('video');
+          media.autoplay = true; media.loop = true; media.muted = true; media.playsInline = true;
+        } else {
+          media = document.createElement('img');
+          media.alt = name;
+          media.loading = 'lazy';
+        }
+        media.src = src;
+        media.className = 'brand-cover';
+        a.appendChild(media);
+      }
       list.appendChild(a);
     });
   </script>

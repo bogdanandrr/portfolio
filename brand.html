@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Branding — Andrei Bogdan</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="branding/manifest.js"></script>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="nav-left">©2026</a>
+    <a href="branding.html" class="nav-right">BRANDING</a>
+  </header>
+
+  <main>
+    <h2 id="brand-name"></h2>
+  </main>
+
+  <section class="portfolio" id="portfolio"></section>
+
+  <script>
+    const VIDEO_EXT = /\.(mp4|webm|mov)$/i;
+
+    const name = new URLSearchParams(location.search).get('name') || '';
+    const files = (window.BRANDING || {})[name];
+    if (!files) location.replace('branding.html');
+
+    document.getElementById('brand-name').textContent = name;
+    document.title = name + ' — Andrei Bogdan';
+
+    const base = 'branding/' + encodeURIComponent(name) + '/';
+    const grid = document.getElementById('portfolio');
+    (files || []).forEach(file => {
+      const item = document.createElement('div');
+      item.className = 'portfolio-item';
+      const src = base + encodeURIComponent(file);
+
+      if (VIDEO_EXT.test(file)) {
+        const v = document.createElement('video');
+        v.src = src;
+        v.autoplay = true; v.loop = true; v.muted = true; v.playsInline = true;
+        v.addEventListener('loadedmetadata', () => {
+          item.classList.add(v.videoWidth > v.videoHeight ? 'full-row' : 'portrait');
+        });
+        item.appendChild(v);
+      } else {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = name;
+        img.addEventListener('load', () => {
+          item.classList.add(img.naturalWidth > img.naturalHeight ? 'full-row' : 'portrait');
+        });
+        item.appendChild(img);
+      }
+      grid.appendChild(item);
+    });
+  </script>
+</body>
+</html>

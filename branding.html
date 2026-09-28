@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Branding — Andrei Bogdan</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="branding/manifest.js"></script>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="nav-left">©2026</a>
+    <a href="index.html" class="nav-right">HOME</a>
+  </header>
+
+  <main>
+    <h2>BRANDING</h2>
+    <nav class="brand-list" id="brand-list"></nav>
+  </main>
+
+  <script>
+    const list = document.getElementById('brand-list');
+    const brands = window.BRANDING || {};
+    Object.keys(brands).sort().forEach(name => {
+      const a = document.createElement('a');
+      a.href = 'brand.html?name=' + encodeURIComponent(name);
+      a.textContent = name;
+      list.appendChild(a);
+    });
+  </script>
+</body>
+</html>

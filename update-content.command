@@ -30,9 +30,36 @@ media_json() {
   echo "$json"
 }
 
+# Videos: poster frame + dimensions (needs ffmpeg: brew install ffmpeg)
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+VIDEO_RE='\.(mp4|webm|mov)$'
+meta="{"
+if command -v ffmpeg >/dev/null && command -v ffprobe >/dev/null; then
+  mkdir -p content/posters
+  mfirst=1
+  for f in content/*; do
+    name="$(basename "$f")"
+    echo "$name" | grep -qiE "$VIDEO_RE" || continue
+    poster="content/posters/${name%.*}.jpg"
+    if [[ ! -f "$poster" || "$f" -nt "$poster" ]]; then
+      ffmpeg -v error -y -ss 1 -i "$f" -frames:v 1 -vf "scale='min(640,iw)':-2" -q:v 4 "$poster" </dev/null \
+        || ffmpeg -v error -y -i "$f" -frames:v 1 -vf "scale='min(640,iw)':-2" -q:v 4 "$poster" </dev/null
+      echo "✓ poster for $name"
+    fi
+    dims="$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$f")"
+    [[ $mfirst -eq 0 ]] && meta+=","
+    meta+="\"$name\":{\"w\":${dims%,*},\"h\":${dims#*,}}"
+    mfirst=0
+  done
+else
+  echo "! ffmpeg/ffprobe not found: skipping posters and dimensions (brew install ffmpeg)"
+fi
+meta+="}"
+
 # Portfolio
 portfolio="$(media_json content)"
 echo "window.PORTFOLIO_FILES = $portfolio;" > content/manifest.js
+echo "window.PORTFOLIO_META = $meta;" >> content/manifest.js
 echo "✓ content/manifest.js updated."
 
 # Branding: one entry per folder in branding/

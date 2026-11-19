@@ -25,19 +25,49 @@
     const VIDEO_EXT = /\.(mp4|webm|mov)$/i;
 
     const grid = document.getElementById('portfolio');
+
+    // Videos only download their data and play while near the viewport.
+    // Poster + dimensions come from update-content.command (content/posters, PORTFOLIO_META).
+    const videoObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const v = entry.target;
+            if (entry.isIntersecting) {
+              v.preload = 'auto';
+              const p = v.play();
+              if (p && p.catch) p.catch(() => {});
+            } else {
+              v.pause();
+            }
+          });
+        }, { rootMargin: '300px 0px' })
+      : null;
+
     (window.PORTFOLIO_FILES || []).forEach(name => {
           const item = document.createElement('div');
           item.className = 'portfolio-item';
 
           if (VIDEO_EXT.test(name)) {
             const v = document.createElement('video');
+            v.loop = true; v.muted = true; v.playsInline = true;
+            const meta = (window.PORTFOLIO_META || {})[name];
+            if (meta) {
+              // Dimensions and poster are known up front: reserve the space, download nothing until near the viewport.
+              v.width = meta.w; v.height = meta.h;
+              v.poster = 'content/posters/' + name.replace(/\.[^.]+$/, '') + '.jpg';
+              v.preload = 'none';
+              item.classList.add(meta.w > meta.h ? 'full-row' : 'portrait');
+            } else {
+              v.preload = 'metadata';
+              v.addEventListener('loadedmetadata', () => {
+                if (v.videoWidth > v.videoHeight) item.classList.add('full-row');
+                else item.classList.add('portrait');
+              });
+            }
             v.src = 'content/' + name;
-            v.autoplay = true; v.loop = true; v.muted = true; v.playsInline = true;
-            v.addEventListener('loadedmetadata', () => {
-              if (v.videoWidth > v.videoHeight) item.classList.add('full-row');
-              else item.classList.add('portrait');
-            });
             item.appendChild(v);
+            if (videoObserver) videoObserver.observe(v);
+            else v.autoplay = true;
           } else {
             const img = document.createElement('img');
             img.src = 'content/' + name;

@@ -46,11 +46,20 @@
         item.appendChild(v);
       } else {
         const img = document.createElement('img');
-        img.src = src;
         img.alt = name;
-        img.addEventListener('load', () => {
-          item.classList.add(img.naturalWidth > img.naturalHeight ? 'full-row' : 'portrait');
-        });
+        img.decoding = 'async';
+        const meta = ((window.BRANDING_META || {})[name] || {})[file];
+        if (meta) {
+          // Known dimensions: reserve the space so lazy loading doesn't make the page jump.
+          img.width = meta.w; img.height = meta.h;
+          img.loading = 'lazy';
+          item.classList.add(meta.w > meta.h ? 'full-row' : 'portrait');
+        } else {
+          img.addEventListener('load', () => {
+            item.classList.add(img.naturalWidth > img.naturalHeight ? 'full-row' : 'portrait');
+          });
+        }
+        img.src = src;
         item.appendChild(img);
       }
       grid.appendChild(item);

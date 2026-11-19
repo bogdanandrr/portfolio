@@ -70,12 +70,20 @@
             else v.autoplay = true;
           } else {
             const img = document.createElement('img');
-            img.src = 'content/' + name;
             img.alt = name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-            img.addEventListener('load', () => {
-              if (img.naturalWidth > img.naturalHeight) item.classList.add('full-row');
-              else item.classList.add('portrait');
-            });
+            img.decoding = 'async';
+            const meta = (window.PORTFOLIO_META || {})[name];
+            if (meta) {
+              img.width = meta.w; img.height = meta.h;
+              img.loading = 'lazy';
+              item.classList.add(meta.w > meta.h ? 'full-row' : 'portrait');
+            } else {
+              img.addEventListener('load', () => {
+                if (img.naturalWidth > img.naturalHeight) item.classList.add('full-row');
+                else item.classList.add('portrait');
+              });
+            }
+            img.src = 'content/' + name;
             item.appendChild(img);
           }
           grid.appendChild(item);

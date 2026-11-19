@@ -147,6 +147,7 @@ h1 {
 .portfolio-item img,
 .portfolio-item video {
   width: 100%;
+  height: auto;
   display: block;
   border-radius: 2px;
 }
@@ -186,6 +187,7 @@ h2 {
 
 .profile-pic {
   width: clamp(200px, 50vw, 420px);
+  height: auto;
   object-fit: cover;
 }
 

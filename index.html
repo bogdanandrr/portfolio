@@ -4,22 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Andrei Bogdan</title>
+  <meta name="description" content="Creative studio. Identity, campaigns, and visual production for modern brands." />
   <link rel="preload" href="fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/Switzer-Regular.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="preload" href="fonts/Switzer-Black.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="portrait-cutout.webp" as="image" type="image/webp" />
+  <link rel="stylesheet" href="style.css?v=8" />
   <script>document.write('<script src="content/manifest.js?' + Date.now() + '"><\/script>');</script>
 </head>
-<body>
+<body class="home">
   <header>
-    <span class="nav-left">©2026</span>
-    <a href="contact.html" class="nav-right">CONTACT</a>
+    <a href="index.html" class="logo">AndreiBogdan</a>
+    <nav class="nav-links">
+      <a href="branding.html">BRANDING</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
   </header>
 
-  <main>
-    <h1><span class="name-first">Andrei</span><br class="name-break"><span class="name-last">Bogdan</span></h1>
-    <p class="tagline">Creative studio. Identity, campaigns, and visual production for modern brands.</p>
-    <a href="branding.html" class="pill-btn">BRANDING</a>
-  </main>
+  <section class="hero">
+    <div class="hero-glow"></div>
+
+    <div class="hero-person p-body">
+      <img src="portrait-cutout.webp" width="1122" height="1222" alt="Andrei Bogdan" fetchpriority="high" decoding="async" />
+    </div>
+
+    <h1 class="hero-name" aria-label="Andrei Bogdan">
+      <span class="w w1" aria-hidden="true"><span style="--i:0">A</span><span style="--i:1">N</span><span style="--i:2">D</span><span style="--i:3">R</span><span style="--i:4">E</span><span style="--i:5">I</span></span>
+      <span class="w w2" aria-hidden="true"><span style="--i:0">B</span><span style="--i:1">O</span><span style="--i:2">G</span><span style="--i:3">D</span><span style="--i:4">A</span><span style="--i:5">N</span></span>
+    </h1>
+
+    <div class="hero-person p-head" aria-hidden="true">
+      <img src="portrait-cutout.webp" width="1122" height="1222" alt="" decoding="async" />
+    </div>
+
+    <div class="hero-blur b1"></div>
+    <div class="hero-blur b2"></div>
+    <div class="hero-blur b3"></div>
+    <div class="hero-grain"></div>
+  </section>
 
   <section class="portfolio" id="portfolio"></section>
 

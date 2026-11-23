@@ -126,7 +126,7 @@ h1 {
   font-size: clamp(2.5rem, 13vw, 13vw);
   font-weight: 500;
   line-height: 0.9;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.055em;
   text-align: center;
   text-transform: none;
   white-space: nowrap;

@@ -27,7 +27,7 @@ compress_images() {
       mv "$f" "$ORIGINALS/$f"
       echo "✓ compressed $f -> $(basename "$out")"
     fi
-  done < <(find "$1" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0)
+  done < <(find "$1" -type f -not -path '*/posters/*' \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0)
 }
 
 # JSON array of sorted media file names in a directory

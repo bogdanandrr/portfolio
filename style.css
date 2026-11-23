@@ -1,3 +1,28 @@
+/* Switzer (Indian Type Foundry), self-hosted, Latin + Latin Extended subset */
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/Switzer-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/Switzer-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/Switzer-Semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -8,7 +33,7 @@
   --bg: #0a0a0a;
   --fg: #fff;
   --title-color: #1c1c1c;
-  --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font: 'Switzer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 html, body {
@@ -31,6 +56,7 @@ header {
   align-items: center;
   padding: 2rem 2.5rem;
   font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -79,6 +105,7 @@ main {
   color: var(--fg);
   text-decoration: none;
   font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -97,7 +124,7 @@ main {
 
 h1 {
   font-size: clamp(2.5rem, 13vw, 13vw);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 0.9;
   letter-spacing: -0.02em;
   text-align: center;
@@ -180,7 +207,7 @@ h1 {
 
 h2 {
   font-size: clamp(1.5rem, 5vw, 4rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -252,6 +279,7 @@ h2 {
 
 .brand-name {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 500;
   letter-spacing: -0.02em;
 }
 

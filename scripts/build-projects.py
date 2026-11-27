@@ -397,6 +397,9 @@ def project_page(p, nxt, css_v):
   {GENERATOR}
   {head_meta(p["title"] + " | Andrei Bogdan", p["slug"] + ".html")}
   <link rel="preload" href="assets/fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="favicon.ico" sizes="32x32" />
+  <link rel="icon" href="assets/icons/icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="stylesheet" href="assets/style.css?v={css_v}" />
 </head>
 <body class="project-page">

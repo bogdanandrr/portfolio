@@ -5,112 +5,226 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Andrei Bogdan</title>
   <meta name="description" content="Creative studio. Identity, campaigns, and visual production for modern brands." />
-  <link rel="preload" href="fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/Switzer-Black.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="portrait-cutout.webp" as="image" type="image/webp" />
-  <link rel="stylesheet" href="style.css?v=8" />
-  <script>document.write('<script src="content/manifest.js?' + Date.now() + '"><\/script>');</script>
+  <link rel="preload" href="assets/fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/Switzer-Black.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/images/intro-poster.jpg" as="image" type="image/jpeg" />
+  <link rel="stylesheet" href="assets/style.css?v=1795775479" />
 </head>
 <body class="home">
   <header>
     <a href="index.html" class="logo">AndreiBogdan</a>
     <nav class="nav-links">
-      <a href="branding.html">BRANDING</a>
       <a href="contact.html">CONTACT</a>
     </nav>
   </header>
 
-  <section class="hero">
-    <div class="hero-glow"></div>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="auto" poster="assets/images/intro-poster.jpg" width="1280" height="720">
+          <source src="assets/video/intro.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-    <div class="hero-person p-body">
-      <img src="portrait-cutout.webp" width="1122" height="1222" alt="Andrei Bogdan" fetchpriority="high" decoding="async" />
-    </div>
+      <h1 class="hero-name" aria-label="Andrei Bogdan">
+        <span class="w w1" aria-hidden="true"><span style="--i:0">A</span><span style="--i:1">N</span><span style="--i:2">D</span><span style="--i:3">R</span><span style="--i:4">E</span><span style="--i:5">I</span></span>
+        <span class="w w2" aria-hidden="true"><span style="--i:0">B</span><span style="--i:1">O</span><span style="--i:2">G</span><span style="--i:3">D</span><span style="--i:4">A</span><span style="--i:5">N</span></span>
+      </h1>
+      <div class="hero-name soft" aria-hidden="true">
+        <span class="w w1" aria-hidden="true"><span style="--i:0">A</span><span style="--i:1">N</span><span style="--i:2">D</span><span style="--i:3">R</span><span style="--i:4">E</span><span style="--i:5">I</span></span>
+        <span class="w w2" aria-hidden="true"><span style="--i:0">B</span><span style="--i:1">O</span><span style="--i:2">G</span><span style="--i:3">D</span><span style="--i:4">A</span><span style="--i:5">N</span></span>
+      </div>
+    </section>
 
-    <h1 class="hero-name" aria-label="Andrei Bogdan">
-      <span class="w w1" aria-hidden="true"><span style="--i:0">A</span><span style="--i:1">N</span><span style="--i:2">D</span><span style="--i:3">R</span><span style="--i:4">E</span><span style="--i:5">I</span></span>
-      <span class="w w2" aria-hidden="true"><span style="--i:0">B</span><span style="--i:1">O</span><span style="--i:2">G</span><span style="--i:3">D</span><span style="--i:4">A</span><span style="--i:5">N</span></span>
-    </h1>
+    <!-- The project list is written by scripts/build-projects.py (run update-content.command). Edits between the markers are overwritten. -->
+    <section class="projects" id="projects">
+      <!-- PROJECTS:START -->
+      <a class="project" href="tom-ford-concept-campaign.html">
+        <div class="project-media is-video" style="--ar:1920/1072"><video muted loop playsinline preload="none" poster="assets/thumbs/tom-ford-concept-campaign/poster.jpg" width="1920" height="1072" data-autoplay><source src="projects/01%20Tom%20Ford%20Concept%20Campaign/poster.mp4" type="video/mp4" /></video></div>
+        <div class="project-text">
+          <span class="project-num">01</span>
+          <h2 class="project-title">Tom Ford Concept Campaign</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="cartier-concept-campaign.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/cartier-concept-campaign/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/02%20Cartier%20Concept%20Campaign/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/02%20Cartier%20Concept%20Campaign/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/02%20Cartier%20Concept%20Campaign/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">02</span>
+          <h2 class="project-title">Cartier Concept Campaign</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="coca-cola-concept-campaign.html">
+        <div class="project-media is-video" style="--ar:1280/720"><video muted loop playsinline preload="none" poster="assets/thumbs/coca-cola-concept-campaign/poster.jpg" width="1280" height="720" data-autoplay><source src="projects/03%20Coca%20Cola%20Concept%20Campaign/poster.mp4" type="video/mp4" /></video></div>
+        <div class="project-text">
+          <span class="project-num">03</span>
+          <h2 class="project-title">Coca Cola Concept Campaign</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="cinematic-concept-campaign-1.html">
+        <div class="project-media is-video" style="--ar:1284/716"><video muted loop playsinline preload="none" poster="assets/thumbs/cinematic-concept-campaign-1/poster.jpg" width="1284" height="716" data-autoplay><source src="projects/04%20Cinematic%20Concept%20Campaign%20%231/poster.mp4" type="video/mp4" /></video></div>
+        <div class="project-text">
+          <span class="project-num">04</span>
+          <h2 class="project-title">Cinematic Concept Campaign #1</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="cinematic-concept-campaign-2.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:716/1284"><video muted loop playsinline preload="none" poster="assets/thumbs/cinematic-concept-campaign-2/real-poster.jpg" width="716" height="1284" data-autoplay><source src="projects/05%20Cinematic%20Concept%20Campaign%20%232/real-poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/05%20Cinematic%20Concept%20Campaign%20%232/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/05%20Cinematic%20Concept%20Campaign%20%232/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">05</span>
+          <h2 class="project-title">Cinematic Concept Campaign #2</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-1.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-1/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/06%20Fashion%20Concept%20Campaign%20%231/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/06%20Fashion%20Concept%20Campaign%20%231/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/06%20Fashion%20Concept%20Campaign%20%231/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">06</span>
+          <h2 class="project-title">Fashion Concept Campaign #1</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-2.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-2/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/07%20Fashion%20Concept%20Campaign%20%232/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/07%20Fashion%20Concept%20Campaign%20%232/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/07%20Fashion%20Concept%20Campaign%20%232/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">07</span>
+          <h2 class="project-title">Fashion Concept Campaign #2</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-3.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-3/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/08%20Fashion%20Concept%20Campaign%20%233/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/08%20Fashion%20Concept%20Campaign%20%233/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/08%20Fashion%20Concept%20Campaign%20%233/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">08</span>
+          <h2 class="project-title">Fashion Concept Campaign #3</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-4.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-4/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/09%20Fashion%20Concept%20Campaign%20%234/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/09%20Fashion%20Concept%20Campaign%20%234/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/09%20Fashion%20Concept%20Campaign%20%234/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">09</span>
+          <h2 class="project-title">Fashion Concept Campaign #4</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="prada-concept-campaign.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/prada-concept-campaign/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/10%20Prada%20Concept%20Campaign/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/10%20Prada%20Concept%20Campaign/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/10%20Prada%20Concept%20Campaign/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">10</span>
+          <h2 class="project-title">Prada Concept Campaign</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-5.html">
+        <div class="project-media is-video" style="--ar:1920/1080"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-5/poster.jpg" width="1920" height="1080" data-autoplay><source src="projects/11%20Fashion%20Concept%20Campaign%20%235/poster.mp4" type="video/mp4" /></video></div>
+        <div class="project-text">
+          <span class="project-num">11</span>
+          <h2 class="project-title">Fashion Concept Campaign #5</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-6.html">
+        <div class="project-media is-video" style="--ar:1920/1056"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-6/poster.jpg" width="1920" height="1056" data-autoplay><source src="projects/12%20Fashion%20Concept%20Campaign%20%236/poster.mp4" type="video/mp4" /></video></div>
+        <div class="project-text">
+          <span class="project-num">12</span>
+          <h2 class="project-title">Fashion Concept Campaign #6</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-7.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-7/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/13%20Fashion%20Concept%20Campaign%20%237/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/13%20Fashion%20Concept%20Campaign%20%237/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/13%20Fashion%20Concept%20Campaign%20%237/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">13</span>
+          <h2 class="project-title">Fashion Concept Campaign #7</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <a class="project" href="fashion-concept-campaign-8.html">
+        <div class="project-group"><div class="project-media is-video" style="--ar:1080/1920"><video muted loop playsinline preload="none" poster="assets/thumbs/fashion-concept-campaign-8/poster.jpg" width="1080" height="1920" data-autoplay><source src="projects/14%20Fashion%20Concept%20Campaign%20%238/poster.mp4" type="video/mp4" /></video></div><div class="project-extras"><div class="project-extra"><img src="projects/14%20Fashion%20Concept%20Campaign%20%238/1.webp" alt="" loading="lazy" decoding="async" /></div><div class="project-extra"><img src="projects/14%20Fashion%20Concept%20Campaign%20%238/2.webp" alt="" loading="lazy" decoding="async" /></div></div></div>
+        <div class="project-text">
+          <span class="project-num">14</span>
+          <h2 class="project-title">Fashion Concept Campaign #8</h2>
+          
+          <span class="project-more">View project</span>
+        </div>
+      </a>
+      <!-- PROJECTS:END -->
+    </section>
 
-    <div class="hero-person p-head" aria-hidden="true">
-      <img src="portrait-cutout.webp" width="1122" height="1222" alt="" decoding="async" />
-    </div>
+    <section class="closing">
+      <img class="closing-pic" src="assets/images/new-profile-pic.webp" width="1920" height="1080" alt="Andrei Bogdan" loading="lazy" decoding="async" />
+      <a class="cta" href="contact.html">Let's work together</a>
+    </section>
 
-    <div class="hero-blur b1"></div>
-    <div class="hero-blur b2"></div>
-    <div class="hero-blur b3"></div>
-    <div class="hero-grain"></div>
-  </section>
-
-  <section class="portfolio" id="portfolio"></section>
+    <footer class="site-footer">
+      <a href="mailto:ciobanu.andreibogdan97@gmail.com" class="footer-mail">ciobanu.andreibogdan97@gmail.com</a>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/bogdan.andrr/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/in/andreibogdanciobanu/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+        </a>
+      </div>
+    </footer>
+  </div>
 
   <script>
-    const VIDEO_EXT = /\.(mp4|webm|mov)$/i;
+    // Autoplay is muted + inline so browsers allow it; retry once in case it was blocked,
+    // and keep the poster still for people who prefer reduced motion.
+    (function () {
+      var v = document.querySelector('.hero-media video');
+      if (!v) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        v.removeAttribute('autoplay');
+        v.pause();
+        return;
+      }
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    })();
 
-    const grid = document.getElementById('portfolio');
-
-    // Videos only download their data and play while near the viewport.
-    // Poster + dimensions come from update-content.command (content/posters, PORTFOLIO_META).
-    const videoObserver = 'IntersectionObserver' in window
-      ? new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            const v = entry.target;
-            if (entry.isIntersecting) {
-              v.preload = 'auto';
-              const p = v.play();
-              if (p && p.catch) p.catch(() => {});
-            } else {
-              v.pause();
-            }
-          });
-        }, { rootMargin: '300px 0px' })
-      : null;
-
-    (window.PORTFOLIO_FILES || []).forEach(name => {
-          const item = document.createElement('div');
-          item.className = 'portfolio-item';
-
-          if (VIDEO_EXT.test(name)) {
-            const v = document.createElement('video');
-            v.loop = true; v.muted = true; v.playsInline = true;
-            const meta = (window.PORTFOLIO_META || {})[name];
-            if (meta) {
-              // Dimensions and poster are known up front: reserve the space, download nothing until near the viewport.
-              v.width = meta.w; v.height = meta.h;
-              v.poster = 'content/posters/' + name.replace(/\.[^.]+$/, '') + '.jpg';
-              v.preload = 'none';
-              item.classList.add(meta.w > meta.h ? 'full-row' : 'portrait');
-            } else {
-              v.preload = 'metadata';
-              v.addEventListener('loadedmetadata', () => {
-                if (v.videoWidth > v.videoHeight) item.classList.add('full-row');
-                else item.classList.add('portrait');
-              });
-            }
-            v.src = 'content/' + name;
-            item.appendChild(v);
-            if (videoObserver) videoObserver.observe(v);
-            else v.autoplay = true;
-          } else {
-            const img = document.createElement('img');
-            img.alt = name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-            img.decoding = 'async';
-            const meta = (window.PORTFOLIO_META || {})[name];
-            if (meta) {
-              img.width = meta.w; img.height = meta.h;
-              img.loading = 'lazy';
-              item.classList.add(meta.w > meta.h ? 'full-row' : 'portrait');
-            } else {
-              img.addEventListener('load', () => {
-                if (img.naturalWidth > img.naturalHeight) item.classList.add('full-row');
-                else item.classList.add('portrait');
-              });
-            }
-            img.src = 'content/' + name;
-            item.appendChild(img);
-          }
-          grid.appendChild(item);
-        });
+    // Parallax: pass the scroll distance to the hero as --p (px); CSS moves the video and each word at its own speed.
+    (function () {
+      var hero = document.querySelector('.hero');
+      if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var y = Math.max(0, window.scrollY);
+        if (y <= hero.offsetHeight) hero.style.setProperty('--p', y + 'px');
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    })();
   </script>
+  <script src="assets/site.js?v=1795775479"></script>
 </body>
 </html>

@@ -753,6 +753,33 @@ h2 {
   background: #1a1a1a;
 }
 
+/* Portrait poster: video on the left, title + text on the right, centred on the video
+   (the title comes first in the page, row-reverse puts it on the right) */
+.pp-top.is-portrait {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 7rem);
+  margin-top: 2rem;
+}
+
+.pp-top.is-portrait .pp-poster {
+  flex: none;
+  width: min(55%, calc(84svh * var(--ar)));
+  margin: 0;
+}
+
+.pp-top.is-portrait .pp-head {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.pp-top.is-portrait .pp-title {
+  font-size: clamp(2.5rem, 5.2vw, 5.5rem);
+}
+
 /* Gallery: as many per row as fit; items in a row share one height and keep their proportions */
 .gallery {
   --row: 26rem;
@@ -865,6 +892,9 @@ h2 {
   .project { --h: 88vw; }
 
   .pp { padding: 0 1.25rem; }
+  .pp-top.is-portrait { flex-direction: column; align-items: stretch; gap: 0; margin-top: 0; }
+  .pp-top.is-portrait .pp-head { margin: 3rem 0 3.5rem; }
+  .pp-top.is-portrait .pp-poster { width: min(100%, calc(80svh * var(--ar))); margin: 0 auto; }
   .project-page header { padding: 1.25rem; }
   .gallery { --row: 60vw; gap: 0.5rem; margin-top: 0.5rem; }
   .pp-next { margin-top: 5rem; }

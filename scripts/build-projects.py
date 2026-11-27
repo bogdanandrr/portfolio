@@ -409,13 +409,15 @@ def project_page(p, nxt, css_v):
   </header>
 
   <main class="pp">
-    <div class="pp-head">
-      <a class="pp-back" href="index.html#projects">← All projects</a>
-      <h1 class="pp-title">{esc(p["title"])}</h1>
-      {f'<div class="pp-desc">{desc}</div>' if desc else ''}
-    </div>
+    <div class="pp-top{' is-portrait' if p["poster"]["h"] > p["poster"]["w"] else ''}">
+      <div class="pp-head">
+        <a class="pp-back" href="index.html#projects">← All projects</a>
+        <h1 class="pp-title">{esc(p["title"])}</h1>
+        {f'<div class="pp-desc">{desc}</div>' if desc else ''}
+      </div>
 
-    {media_html(p["poster"], "pp-poster", eager=True, sound=True)}
+      {media_html(p["poster"], "pp-poster", eager=True, sound=True)}
+    </div>
 
     {f'<div class="gallery">{chr(10)}      {gallery}{chr(10)}    </div>' if p["rest"] else ''}
 

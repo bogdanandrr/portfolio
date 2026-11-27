@@ -13,8 +13,12 @@ What it does (safe to run again and again):
   1. Compresses every new image (-> .webp, long edge max 2560px) and video (-> H.264 .mp4,
      long edge max 1920px, audio kept). Originals are MOVED to ../Website-originals/projects/.
   2. Makes a still frame for every video in assets/thumbs/<slug>/ (shown while the video loads).
-  3. Writes one page per project: <slug>.html (e.g. tom-ford-concept-campaign.html).
-  4. Rewrites the project list on the homepage (between the PROJECTS markers in index.html).
+  3. Makes the homepage tile of each project in assets/tiles/: a short silent loop (<slug>.webm + .mp4,
+     long edge 1280px, from the untouched original when there is one), a .webp poster of its first
+     frame, and small copies of the two collage images. The project pages keep the full videos.
+  4. Writes one page per project: <slug>.html (e.g. tom-ford-concept-campaign.html), with title,
+     description and social-sharing (Open Graph / Twitter) tags.
+  5. Rewrites the project list on the homepage (between the PROJECTS markers in index.html).
 
 Needs ffmpeg, ffprobe and cwebp (brew install ffmpeg webp).
 """
@@ -45,6 +49,25 @@ IMG_QUALITY = 82
 VID_MAX = 1920          # long edge, px
 VID_CRF = 24
 DONE_TAG = "andreibogdan-web"   # written into compressed videos so they are never compressed twice
+
+# Homepage tiles: short, silent loops made only for the homepage (assets/tiles/), so the project
+# pages keep the full video with sound. Made from the untouched master in Website-originals when
+# there is one (better than re-encoding an already compressed file).
+TILES = ROOT / "assets" / "tiles"
+TILE_LONG = 1280         # long edge, px (tiles show at ~360-1440 css px; portrait ones at 360-600)
+TILE_FPS = 30            # 60 fps sources are halved: same look in a tile, far fewer bytes
+TILE_CRF = 21            # H.264
+TILE_VP9_CRF = 30        # VP9 (.webm, first <source>; skipped when it isn't smaller than the mp4)
+TILE_SECONDS = 4.5         # loop length
+TILE_MIN_SECONDS = 3
+TILE_MAX_BYTES = 2_500_000   # per file; if over, the loop gets shorter (never a higher CRF)
+TILE_POSTER_W = 1200     # poster .webp (first frame of the loop), max width
+TILE_POSTER_BYTES = 120_000
+EXTRA_W = 640            # the two small collage images next to portrait tiles
+TILE_SETTINGS = f"{TILE_LONG}/{TILE_FPS}/{TILE_CRF}/{TILE_VP9_CRF}/{TILE_SECONDS}/{TILE_MAX_BYTES}/{TILE_POSTER_W}/v2"
+
+SITE = "https://andrei-bogdan.work"
+TAGLINE = "I build the way a brand looks, moves and sells."
 
 RESERVED = {"index", "contact", "brand", "branding", "style", "build-projects"}
 GENERATOR = '<meta name="generator" content="build-projects.py" />'
@@ -80,7 +103,7 @@ def esc(s):
 def probe(path):
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries",
-         "stream=codec_type,width,height:stream_tags=rotate:format=duration:format_tags=comment",
+         "stream=codec_type,width,height,avg_frame_rate:stream_tags=rotate:format=duration:format_tags=comment",
          "-of", "json", str(path)],
         capture_output=True, text=True).stdout
     data = json.loads(out or "{}")
@@ -90,8 +113,13 @@ def probe(path):
     if str(v.get("tags", {}).get("rotate", "0")) in ("90", "-90", "270"):
         w, h = h, w
     fmt = data.get("format", {})
+    try:
+        num, den = (v.get("avg_frame_rate") or "0/1").split("/")
+        fps = float(num) / float(den or 1)
+    except (ValueError, ZeroDivisionError):
+        fps = 0.0
     return {
-        "w": w, "h": h,
+        "w": w, "h": h, "fps": fps,
         "audio": any(s.get("codec_type") == "audio" for s in streams),
         "duration": float(fmt.get("duration", 0) or 0),
         "comment": fmt.get("tags", {}).get("comment", ""),
@@ -178,6 +206,114 @@ def make_still(video, slug, info):
     return still
 
 
+# ---------------------------------------------------------------- homepage tiles
+
+_masters = None
+
+
+def find_master(folder_name, video, info):
+    """The untouched original of a site video, if it is in Website-originals: same length (to the
+    frame) and orientation, preferring the folder with the same number."""
+    global _masters
+    if _masters is None:
+        _masters = []
+        for f in ORIGINALS.rglob("*") if ORIGINALS.exists() else []:
+            if f.is_file() and f.suffix.lower() in VIDEO:
+                _masters.append((f, probe(f)))
+    num = re.match(r"\s*(\d+)", folder_name)
+    best = None
+    for f, m in _masters:
+        if abs(m["duration"] - info["duration"]) > 0.08 or (m["w"] >= m["h"]) != (info["w"] >= info["h"]):
+            continue
+        fnum = re.match(r"\s*(\d+)", f.parent.name)
+        same_folder = bool(num and fnum and int(num.group(1)) == int(fnum.group(1)))
+        score = (not same_folder, f.stem.lower() != video.stem.lower(), abs(m["duration"] - info["duration"]))
+        if best is None or score < best[0]:
+            best = (score, f, m)
+    return (best[1], best[2]) if best else (video, info)
+
+
+def webp_from(png, out, max_w, max_bytes):
+    """cwebp with the highest quality that still fits max_bytes."""
+    for q in (82, 76, 70, 64, 58, 50):
+        subprocess.run(["cwebp", "-quiet", "-q", str(q), "-m", "6", "-sharp_yuv", "-metadata", "none",
+                        "-resize", str(max_w), "0", str(png), "-o", str(out)])
+        if out.exists() and out.stat().st_size <= max_bytes:
+            return
+    log(f"  ! {out.name} is {out.stat().st_size // 1000} KB (over {max_bytes // 1000} KB)")
+
+
+def make_tile(folder_name, video, info, slug):
+    """Short silent loop for the homepage: <slug>.webm (VP9) + <slug>.mp4 (H.264) + <slug>.webp poster."""
+    src, sinfo = find_master(folder_name, video, info)
+    TILES.mkdir(parents=True, exist_ok=True)
+    mp4, webm, poster = TILES / f"{slug}.mp4", TILES / f"{slug}.webm", TILES / f"{slug}.webp"
+    stamp = TILES / f"{slug}.json"
+    key = {"src": os.path.relpath(src, ROOT.parent), "size": src.stat().st_size, "mtime": int(src.stat().st_mtime), "settings": TILE_SETTINGS}
+    if stamp.exists() and mp4.exists() and poster.exists():
+        saved = json.loads(stamp.read_text())
+        if {k: saved.get(k) for k in key} == key:
+            return saved
+
+    log(f"  … homepage loop from {src.relative_to(ROOT.parent)}")
+    vf = (f"scale=w={TILE_LONG}:h={TILE_LONG}:force_original_aspect_ratio=decrease"
+          f":force_divisible_by=2:flags=lanczos")
+    if sinfo["fps"] > TILE_FPS + 1:
+        vf += f",fps={TILE_FPS}"
+    seconds = min(TILE_SECONDS, sinfo["duration"])
+    tmp = TILES / f"{slug}.tmp"
+    while True:
+        t = ["-t", f"{seconds:.3f}"]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), *t, "-map", "0:v:0", "-an", "-vf", vf,
+                        "-c:v", "libx264", "-preset", "slow", "-tune", "film", "-crf", str(TILE_CRF),
+                        "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-f", "mp4", str(tmp) + ".mp4"],
+                       stdin=subprocess.DEVNULL, check=True)
+        if Path(str(tmp) + ".mp4").stat().st_size <= TILE_MAX_BYTES or seconds <= TILE_MIN_SECONDS:
+            break
+        seconds = max(TILE_MIN_SECONDS, seconds - 1)
+        log(f"    over {TILE_MAX_BYTES / 1e6:.1f} MB, loop shortened to {seconds:g}s")
+    # VP9, two passes (better quality for the same size)
+    common = ["-i", str(src), *t, "-map", "0:v:0", "-an", "-vf", vf, "-c:v", "libvpx-vp9", "-crf", str(TILE_VP9_CRF),
+              "-b:v", "0", "-row-mt", "1", "-pix_fmt", "yuv420p", "-passlogfile", str(tmp)]
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *common, "-pass", "1", "-cpu-used", "4", "-f", "null", "-"],
+                   stdin=subprocess.DEVNULL, check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *common, "-pass", "2", "-cpu-used", "1", "-f", "webm",
+                    str(tmp) + ".webm"], stdin=subprocess.DEVNULL, check=True)
+    for f in TILES.glob(f"{slug}.tmp-*.log"):
+        f.unlink()
+    Path(str(tmp) + ".mp4").replace(mp4)
+    if Path(str(tmp) + ".webm").stat().st_size < mp4.stat().st_size:
+        Path(str(tmp) + ".webm").replace(webm)
+    else:
+        Path(str(tmp) + ".webm").unlink()
+        webm.unlink(missing_ok=True)
+
+    # poster = first frame of the loop
+    png = TILES / f"{slug}.tmp.png"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-frames:v", "1", "-vf", vf, str(png)],
+                   stdin=subprocess.DEVNULL, check=True)
+    tinfo = probe(mp4)
+    webp_from(png, poster, min(TILE_POSTER_W, tinfo["w"]), TILE_POSTER_BYTES)
+    png.unlink()
+
+    saved = {**key, "w": tinfo["w"], "h": tinfo["h"], "seconds": round(seconds, 2), "webm": webm.exists()}
+    stamp.write_text(json.dumps(saved, indent=1))
+    log(f"  ✓ loop {seconds:g}s {tinfo['w']}x{tinfo['h']}: mp4 {mp4.stat().st_size / 1e6:.2f} MB"
+        + (f", webm {webm.stat().st_size / 1e6:.2f} MB" if webm.exists() else ", no webm (not smaller)")
+        + f", poster {poster.stat().st_size // 1000} KB")
+    return saved
+
+
+def make_extra(image, slug, n):
+    """Small copy of a gallery image for the collage next to a portrait tile."""
+    out = TILES / f"{slug}-extra{n}.webp"
+    if not (out.exists() and out.stat().st_mtime >= image.stat().st_mtime):
+        TILES.mkdir(parents=True, exist_ok=True)
+        info = probe(image)
+        webp_from(image, out, min(EXTRA_W, info["w"]), 80_000)
+    return out
+
+
 # ---------------------------------------------------------------- HTML pieces
 
 def media_html(item, cls, eager=False, sound=False):
@@ -197,6 +333,40 @@ def media_html(item, cls, eager=False, sound=False):
     return (f'<div class="{cls} is-video" {style}><video muted loop playsinline preload="none" '
             f'poster="{item["still"]}" width="{w}" height="{h}" data-autoplay>'
             f'<source src="{item["src"]}" type="video/mp4" /></video>{btn}</div>')
+
+
+def tile_html(item):
+    """Homepage tile: nothing but the poster loads until site.js sees it on screen (sources are in data-src)."""
+    t = item["tile"]
+    v = lambda p: f"{url(p)}?v={int(p.stat().st_mtime)}"
+    sources = ""
+    if t["webm"]:
+        sources += f'<source data-src="{v(TILES / (item["slug"] + ".webm"))}" type="video/webm" />'
+    sources += f'<source data-src="{v(TILES / (item["slug"] + ".mp4"))}" type="video/mp4" />'
+    return (f'<div class="project-media is-video" style="--ar:{t["w"]}/{t["h"]}"><video muted loop playsinline '
+            f'preload="none" poster="{v(TILES / (item["slug"] + ".webp"))}" width="{t["w"]}" height="{t["h"]}" '
+            f'data-tile>{sources}</video></div>')
+
+
+def head_meta(title, path):
+    """<title>, description, Open Graph and Twitter card tags (absolute URLs, or the networks ignore them)."""
+    page_url = f"{SITE}/{path}"
+    image = f"{SITE}/assets/images/og.jpg"
+    t, d = esc(title), esc(TAGLINE)
+    return f"""<title>{t}</title>
+  <meta name="description" content="{d}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Andrei Bogdan" />
+  <meta property="og:title" content="{t}" />
+  <meta property="og:description" content="{d}" />
+  <meta property="og:url" content="{page_url}" />
+  <meta property="og:image" content="{image}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{t}" />
+  <meta name="twitter:description" content="{d}" />
+  <meta name="twitter:image" content="{image}" />"""
 
 
 def paragraphs(text):
@@ -219,15 +389,13 @@ FOOTER = """  <footer class="site-footer">
 def project_page(p, nxt, css_v):
     desc = paragraphs(p["description"])
     gallery = "\n      ".join(media_html(m, "g-item", sound=True) for m in p["rest"])
-    meta_desc = esc(re.sub(r"\s+", " ", p["description"]).strip()[:160] or f"{p['title']}, a project by Andrei Bogdan.")
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {GENERATOR}
-  <title>{esc(p["title"])} — Andrei Bogdan</title>
-  <meta name="description" content="{meta_desc}" />
+  {head_meta(p["title"] + " | Andrei Bogdan", p["slug"] + ".html")}
   <link rel="preload" href="assets/fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/style.css?v={css_v}" />
 </head>
@@ -270,13 +438,13 @@ def homepage_list(projects):
     for i, p in enumerate(projects, 1):
         desc = paragraphs(p["description"])
         home = p["home"]
-        media = media_html(home, "project-media", eager=False)
+        media = tile_html(home) if home.get("tile") else media_html(home, "project-media", eager=False)
         # Portrait posters leave a lot of empty space on wide screens: add the project's first
-        # two images next to them as a small staggered collage.
-        extras = [it for it in p["rest"] if it["kind"] == "image"][:2] if home["h"] > home["w"] else []
+        # two images next to them as a small staggered collage (small copies, made for this).
+        extras = p["extras"] if home["h"] > home["w"] else []
         if extras:
-            tiles = "".join(f'<div class="project-extra"><img src="{it["src"]}" alt="" loading="lazy" decoding="async" /></div>'
-                            for it in extras)
+            tiles = "".join(f'<div class="project-extra"><img src="{x}" alt="" loading="lazy" decoding="async" /></div>'
+                            for x in extras)
             media = f'<div class="project-group">{media}<div class="project-extras">{tiles}</div></div>'
         rows.append(f"""      <a class="project" href="{p["slug"]}.html">
         {media}
@@ -334,7 +502,7 @@ def main():
             if not info["w"]:
                 log(f"  ! skipped {f.name} (could not read it)")
                 continue
-            item = {"name": f.name, "src": url(f), "w": info["w"], "h": info["h"],
+            item = {"name": f.name, "src": url(f), "w": info["w"], "h": info["h"], "path": f, "info": info,
                     "kind": "video" if ext in VIDEO else "image", "audio": info["audio"]}
             if item["kind"] == "video":
                 item["still"] = url(make_still(f, slug, info))
@@ -367,9 +535,19 @@ def main():
         desc_file = next((f for f in d.iterdir() if f.name.lower() in ("descriere.txt", "description.txt")), None)
         description = desc_file.read_text(encoding="utf-8", errors="ignore").strip() if desc_file else ""
 
+        rest = [it for it in items if it is not poster and it is not home]
+        home = home or poster
+        if home["kind"] == "video":
+            home["tile"] = make_tile(d.name, home["path"], home["info"], slug)
+            home["slug"] = slug
+        extras = []
+        if home["h"] > home["w"]:
+            for n, it in enumerate([it for it in rest if it["kind"] == "image"][:2], 1):
+                x = make_extra(it["path"], slug, n)
+                extras.append(f"{url(x)}?v={int(x.stat().st_mtime)}")
+
         projects.append({"folder": d.name, "title": title, "slug": slug, "description": description,
-                         "poster": poster, "home": home or poster,
-                         "rest": [it for it in items if it is not poster and it is not home]})
+                         "poster": poster, "home": home, "rest": rest, "extras": extras})
 
     css_v = str(int(max((ROOT / "assets" / f).stat().st_mtime for f in ("style.css", "site.js"))))
 
@@ -385,6 +563,15 @@ def main():
     for d in THUMBS.glob("*") if THUMBS.exists() else []:
         if d.is_dir() and d.name not in slugs:
             shutil.rmtree(d)
+    # homepage tiles of projects that are gone (or whose homepage item is no longer a video)
+    keep = set()
+    for p in projects:
+        if p["home"].get("tile"):
+            keep |= {f"{p['slug']}.{e}" for e in ("mp4", "webm", "webp", "json")}
+        keep |= {f"{p['slug']}-extra{n}.webp" for n in range(1, len(p["extras"]) + 1)}
+    for f in TILES.glob("*") if TILES.exists() else []:
+        if f.is_file() and f.name not in keep:
+            f.unlink()
 
     # 4. homepage list
     page = INDEX.read_text(encoding="utf-8")
@@ -396,6 +583,12 @@ def main():
         log(f"\n✓ homepage updated with {len(projects)} projects")
     else:
         log("\n! index.html has no PROJECTS markers: homepage not updated")
+    contact = ROOT / "contact.html"
+    if contact.exists():
+        text = contact.read_text(encoding="utf-8")
+        new = re.sub(r'(style\.css|site\.js)\?v=\d+', lambda m: f"{m.group(1)}?v={css_v}", text)
+        if new != text:
+            contact.write_text(new, encoding="utf-8")
 
     log(f"✓ {len(projects)} project pages written. Originals are in {ORIGINALS}")
 

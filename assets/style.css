@@ -161,11 +161,18 @@ main {
   object-position: 50% 0;
 }
 
+/* Light dim over the whole video, then a soft fade to black over the part where the name and the line sit
+   (replaces the old text shadow; it also melts the cropped bottom edge into the page) */
 .hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.28);
+  background:
+    linear-gradient(to bottom,
+      rgba(18, 18, 18, 0) 38%,
+      rgba(18, 18, 18, 0.32) 66%,
+      rgba(18, 18, 18, 0.78) 100%),
+    rgba(0, 0, 0, 0.14);
 }
 
 /* Big name */
@@ -182,7 +189,6 @@ main {
   letter-spacing: -0.035em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 6px 40px rgba(0, 0, 0, 0.28);
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, #000 var(--n-from), rgba(0, 0, 0, 0) var(--n-to));
   mask-image: linear-gradient(to bottom, #000 var(--n-from), rgba(0, 0, 0, 0) var(--n-to));
@@ -201,6 +207,37 @@ main {
 
 .hero-name .w1 { left: 7vw;  top: 25%; }
 .hero-name .w2 { right: 4vw; top: 50%; }
+
+/* The line under the name: same frame as the name (so it sits right under BOGDAN), but never blurred */
+.hero-line-frame {
+  --fs: min(calc(var(--ph) * 0.19), 12.5vw);   /* the name's font size */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--H) - var(--Hfull));
+  height: var(--ph);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-line {
+  position: absolute;
+  right: calc(4vw + 0.15em);
+  top: calc(50% + var(--fs) * 0.8 + clamp(0.9rem, 1.6vw, 1.6rem));
+  font-size: clamp(1rem, 1.45vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.85);
+  translate: 0 calc(var(--p, 0px) * -0.32);
+  animation: fade-up 1s 1.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* Scroll parallax: --p is the scroll distance in px (set from JS). Each word and the video move at their own speed.
    The sharp and blurred copies of the name share these classes, so they stay in sync. */
@@ -310,6 +347,15 @@ main {
   .hero-name { font-size: min(calc(var(--ph) * 0.19), 21vw); }
   .hero-name .w1 { left: 5vw;  top: 52%; }
   .hero-name .w2 { right: 5vw; top: 67%; }
+  .hero-line-frame { --fs: min(calc(var(--ph) * 0.19), 21vw); bottom: 0; }
+  .hero-line {
+    left: 5vw;
+    right: 5vw;
+    top: calc(67% + var(--fs) * 0.8 + 0.9rem);
+    font-size: 1rem;
+    white-space: normal;
+    text-align: right;
+  }
 
   .closing { padding-top: 2rem; }
   .site-footer {
@@ -319,7 +365,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home header, .hero-name .w span {
+  .home header, .hero-name .w span, .hero-line {
     animation: none;
   }
 }
@@ -369,13 +415,6 @@ main {
   }
 }
 
-/* Contact */
-.contact-main {
-  flex-direction: column;
-  gap: 2rem;
-  text-align: center;
-}
-
 h2 {
   font-size: clamp(1.5rem, 5vw, 4rem);
   font-weight: 600;
@@ -383,52 +422,87 @@ h2 {
   text-transform: uppercase;
 }
 
-.profile-pic {
-  width: clamp(200px, 50vw, 420px);
+/* Contact page: the homepage photo, then the details as label / value rows */
+.contact {
+  display: block;
+  flex: none;
+  padding: 0 0 clamp(5rem, 10vw, 9rem);
+}
+
+.contact-pic {
+  display: block;
+  width: 100%;
   height: auto;
-  object-fit: cover;
+  mix-blend-mode: lighten;   /* the photo's black fade becomes the page colour, as on the homepage */
 }
 
-.email-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--fg);
-  font-size: clamp(0.9rem, 2vw, 1.25rem);
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: opacity 0.2s;
+.contact-body {
+  width: min(100% - 5rem, 56rem);
+  margin: clamp(-6rem, -5vw, -2rem) auto 0;
+  position: relative;
 }
 
-.mail-icon {
-  width: 1.2em;
-  height: 1.2em;
-  flex-shrink: 0;
+.contact-title {
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
 }
 
-.email-link:hover {
+.contact-list {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.contact-list div {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contact-list div:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contact-list dt {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   opacity: 0.5;
 }
 
-.instagram-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+.contact-list dd a {
   color: var(--fg);
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
-  letter-spacing: 0.04em;
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
+  overflow-wrap: anywhere;
   transition: opacity 0.2s;
 }
 
-.instagram-link:hover {
+.contact-list dd a:hover {
+  opacity: 0.55;
+}
+
+.contact-list dd a::after {
+  content: " ↗";
+  font-size: 0.7em;
   opacity: 0.5;
 }
 
-.ig-icon {
-  width: 1.2em;
-  height: 1.2em;
-  flex-shrink: 0;
+.contact-list dd a[href^="mailto"]::after {
+  content: "";
+}
+
+@media (max-width: 700px) {
+  .contact-page header { padding: 1.25rem; }
+  .contact-body { width: calc(100% - 2.5rem); margin-top: -1rem; }
+  .contact-list div { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.1rem 0; }
 }
 
 /* Branding */

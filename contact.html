@@ -3,34 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact — Andrei Bogdan</title>
+  <title>Contact | Andrei Bogdan</title>
+  <meta name="description" content="I build the way a brand looks, moves and sells." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Andrei Bogdan" />
+  <meta property="og:title" content="Contact | Andrei Bogdan" />
+  <meta property="og:description" content="I build the way a brand looks, moves and sells." />
+  <meta property="og:url" content="https://andrei-bogdan.work/contact.html" />
+  <meta property="og:image" content="https://andrei-bogdan.work/assets/images/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact | Andrei Bogdan" />
+  <meta name="twitter:description" content="I build the way a brand looks, moves and sells." />
+  <meta name="twitter:image" content="https://andrei-bogdan.work/assets/images/og.jpg" />
   <link rel="preload" href="assets/fonts/Switzer-Medium.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="assets/style.css?v=6" />
+  <link rel="preload" href="assets/fonts/Switzer-Black.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/style.css?v=1795792680" />
 </head>
-<body>
+<body class="contact-page">
   <header>
-    <a href="index.html" class="nav-left">©2026</a>
-    <a href="index.html" class="nav-right">HOME</a>
+    <a href="index.html" class="logo">AndreiBogdan</a>
+    <nav class="nav-links">
+      <a href="contact.html" aria-current="page">CONTACT</a>
+    </nav>
   </header>
 
-  <main class="contact-main">
-    <h2>LET'S TALK</h2>
-    <img src="assets/images/ProfilePic.webp" alt="Andrei Bogdan" class="profile-pic" width="840" height="1050" decoding="async" />
-    <a href="mailto:ciobanu.andreibogdan97@gmail.com" class="email-link">
-      <svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2"/>
-        <polyline points="2,4 12,13 22,4"/>
-      </svg>
-      ciobanu.andreibogdan97@gmail.com
-    </a>
-    <a href="https://www.instagram.com/bogdan.andrr/" target="_blank" rel="noopener" class="instagram-link">
-      <svg class="ig-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-        <circle cx="12" cy="12" r="4.5"/>
-        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
-      </svg>
-      @bogdan.andrr
-    </a>
+  <main class="contact">
+    <img class="contact-pic" src="assets/images/new-profile-pic.webp" width="1920" height="1080" alt="Andrei Bogdan" fetchpriority="high" decoding="async" />
+
+    <div class="contact-body">
+      <h1 class="contact-title">Let's work together</h1>
+      <dl class="contact-list">
+        <div>
+          <dt>Email</dt>
+          <dd><a href="mailto:ciobanu.andreibogdan97@gmail.com">ciobanu.andreibogdan97@gmail.com</a></dd>
+        </div>
+        <div>
+          <dt>Instagram</dt>
+          <dd><a href="https://www.instagram.com/bogdan.andrr/" target="_blank" rel="noopener">@bogdan.andrr</a></dd>
+        </div>
+        <div>
+          <dt>LinkedIn</dt>
+          <dd><a href="https://www.linkedin.com/in/andreibogdanciobanu/" target="_blank" rel="noopener">Andrei Bogdan Ciobanu</a></dd>
+        </div>
+      </dl>
+    </div>
   </main>
 </body>
 </html>
